@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Prediction Result</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<h1>🌱 Prediction Result</h1>
+
+
+
+<img 
+src="{{ image_path }}"
+class="plant-image">
+
+
+
+<div class="result-card">
+
+
+<h2>{{ disease }}</h2>
+
+
+<p class="confidence">
+
+Confidence: {{ confidence }}%
+
+</p>
+
+
+<div class="confidence-bar">
+
+    <div class="confidence-fill"
+         style="width: {{ confidence }}%;">
+    </div>
+
+</div>
+
+
+</div>
+
+
+
+<div class="info-card">
+
+<h3>🩺 Symptoms</h3>
+
+<p>{{ symptoms }}</p>
+
+</div>
+
+
+
+<div class="info-card">
+
+<h3>💊 Treatment</h3>
+
+<p>{{ treatment }}</p>
+
+</div>
+
+
+
+<div class="info-card">
+
+<h3>🛡 Prevention</h3>
+
+<p>{{ prevention }}</p>
+
+</div>
+
+
+
+<br>
+
+
+<a href="/">
+
+<button>
+
+🔄 Test Another Image
+
+</button>
+
+</a>
+
+
+
+</div>
+
+
+</body>
+
+</html>

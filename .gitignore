@@ -1,0 +1,15 @@
+venv/
+__pycache__/
+*.pyc
+dataset/
+static/uploads/
+test_images/
+
+# Extra trained models
+plant_disease_mobilenet.keras
+plant_disease_model.h5
+
+# Training backup files
+train_cnn_backup.py
+train_finetune.py
+train_mobilenet.py
