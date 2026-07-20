@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 import tensorflow as tf
 import numpy as np
 import os
+import json
 from tensorflow.keras.preprocessing import image
 
 app = Flask(__name__)
@@ -18,19 +19,11 @@ model = tf.keras.models.load_model("plant_disease_final.keras")
 print("✅ AI Model Loaded Successfully!")
 
 
-# Disease class names
-class_names = [
-    "Tomato___Bacterial_spot",
-    "Tomato___Early_blight",
-    "Tomato___Late_blight",
-    "Tomato___Leaf_Mold",
-    "Tomato___Septoria_leaf_spot",
-    "Tomato___Spider_mites Two-spotted_spider_mite",
-    "Tomato___Target_Spot",
-    "Tomato___Tomato_Yellow_Leaf_Curl_Virus",
-    "Tomato___Tomato_mosaic_virus",
-    "Tomato___healthy"
-]
+# Load class names
+with open("class_names.json", "r") as f:
+    class_names = json.load(f)
+
+print("✅ Class names loaded successfully!")
 
 
 # Disease information
@@ -162,7 +155,14 @@ def predict():
 
 
     # Get disease details
-    info = disease_info[disease]
+    info = disease_info.get(
+    disease,
+    {
+        "symptoms": "Information will be added soon.",
+        "treatment": "Treatment information will be added soon.",
+        "prevention": "Prevention information will be added soon."
+    }
+)
 
 
     return render_template(
