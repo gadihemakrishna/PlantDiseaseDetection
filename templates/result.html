@@ -1,105 +1,289 @@
+
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Prediction Result</title>
+    <title>Prediction Result - AgriVision AI</title>
 
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
 </head>
 
-
 <body>
-
-
 <div class="container">
 
+    <div class="page-header">
+        <p class="page-label">PLANT DISEASE DETECTION</p>
+        <h1>Prediction Result</h1>
+        <p class="page-subtitle">
+            AI-powered analysis of your uploaded plant image
+        </p>
+    </div>
 
-<h1>🌱 Prediction Result</h1>
+    <div class="image-section">
+        <img
+            src="{{ image_path }}"
+            class="plant-image"
+            alt="Uploaded plant image"
+        >
+    </div>
 
+    <div class="result-card">
+        <p class="result-label">DETECTED CONDITION</p>
 
+        <h2>{{ disease }}</h2>
 
-<img 
-src="{{ image_path }}"
-class="plant-image">
+        <p class="confidence">
+            Confidence: {{ confidence }}%
+        </p>
 
+        <div class="confidence-bar">
+            <div
+                class="confidence-fill"
+                style="width: {{ confidence }}%;"
+            ></div>
+        </div>
+    </div>
 
+    <div class="information-section">
 
-<div class="result-card">
+        <div class="info-card">
+            <div class="info-icon">01</div>
+            <div>
+                <h3>Symptoms</h3>
+                <p>{{ symptoms }}</p>
+            </div>
+        </div>
 
+        <div class="info-card">
+            <div class="info-icon">02</div>
+            <div>
+                <h3>Treatment</h3>
+                <p>{{ treatment }}</p>
+            </div>
+        </div>
 
-<h2>{{ disease }}</h2>
+        <div class="info-card">
+            <div class="info-icon">03</div>
+            <div>
+                <h3>Prevention</h3>
+                <p>{{ prevention }}</p>
+            </div>
+        </div>
 
+    </div>
 
-<p class="confidence">
+    <div class="chatbot-card">
 
-Confidence: {{ confidence }}%
+        <div class="chatbot-header">
+            <div class="ai-avatar">AI</div>
 
-</p>
+            <div>
+                <h3>Plant Health Assistant</h3>
+                <p>Powered by Ollama AI</p>
+            </div>
 
+            <div class="online-status">
+                <span></span>
+                Online
+            </div>
+        </div>
 
-<div class="confidence-bar">
+        <div class="chatbot-description">
+            Ask questions about the detected disease, treatment,
+            prevention, symptoms, or plant management.
+        </div>
 
-    <div class="confidence-fill"
-         style="width: {{ confidence }}%;">
+        <div id="chatBox" class="chat-box" aria-live="polite">
+
+            <div class="chat-message ai-message">
+                <div class="message-avatar">AI</div>
+
+                <div class="message-content">
+                    <span class="message-name">AI Assistant</span>
+                    <p>
+                        Hello! I can help you understand the detected
+                        plant disease. What would you like to know?
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="chat-input-area">
+
+            <input
+                type="text"
+                id="chatInput"
+                class="chat-input"
+                placeholder="Ask about this disease..."
+                autocomplete="off"
+                aria-label="Ask a plant health question"
+            >
+
+            <button
+                type="button"
+                id="sendButton"
+                class="chat-send-button"
+            >
+                Send
+            </button>
+
+        </div>
+
+        <p class="chat-hint">
+            Press Enter to send your question
+        </p>
+
+    </div>
+
+    <div class="bottom-actions">
+        <a href="/" class="test-again-button">
+            Test Another Image
+        </a>
     </div>
 
 </div>
 
+<script>
+const diseaseCode = {{ disease_code | tojson }};
 
-</div>
+async function sendMessage() {
+    const input = document.getElementById("chatInput");
+    const button = document.getElementById("sendButton");
+    const chatBox = document.getElementById("chatBox");
 
+    const message = input.value.trim();
 
+    if (!message || button.disabled) {
+        return;
+    }
 
-<div class="info-card">
+    const userMessage = document.createElement("div");
+    userMessage.className = "chat-message user-message";
 
-<h3>🩺 Symptoms</h3>
+    const userContent = document.createElement("div");
+    userContent.className = "message-content user-content";
 
-<p>{{ symptoms }}</p>
+    const userName = document.createElement("span");
+    userName.className = "message-name";
+    userName.textContent = "You";
 
-</div>
+    const userText = document.createElement("p");
+    userText.textContent = message;
 
+    userContent.append(userName, userText);
+    userMessage.appendChild(userContent);
+    chatBox.appendChild(userMessage);
 
+    input.value = "";
+    button.disabled = true;
+    button.textContent = "Sending...";
 
-<div class="info-card">
+    const aiMessage = document.createElement("div");
+    aiMessage.className = "chat-message ai-message";
 
-<h3>💊 Treatment</h3>
+    const avatar = document.createElement("div");
+    avatar.className = "message-avatar";
+    avatar.textContent = "AI";
 
-<p>{{ treatment }}</p>
+    const content = document.createElement("div");
+    content.className = "message-content";
 
-</div>
+    const name = document.createElement("span");
+    name.className = "message-name";
+    name.textContent = "AI Assistant";
 
+    const answer = document.createElement("p");
+    answer.style.whiteSpace = "pre-wrap";
+    answer.style.overflowWrap = "anywhere";
 
+    const cursor = document.createElement("span");
+    cursor.className = "typing-cursor";
+    cursor.textContent = "▍";
 
-<div class="info-card">
+    content.append(name, answer, cursor);
+    aiMessage.append(avatar, content);
+    chatBox.appendChild(aiMessage);
 
-<h3>🛡 Prevention</h3>
+    chatBox.scrollTop = chatBox.scrollHeight;
 
-<p>{{ prevention }}</p>
+    try {
+        const formData = new FormData();
+        formData.append("message", message);
+        formData.append("disease", diseaseCode);
 
-</div>
+        const response = await fetch("/chat", {
+            method: "POST",
+            body: formData
+        });
 
+        if (!response.ok) {
+            throw new Error(await response.text());
+        }
 
+        if (!response.body) {
+            throw new Error("Streaming is not supported.");
+        }
 
-<br>
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
 
+        while (true) {
+            const { value, done } = await reader.read();
 
-<a href="/">
+            if (done) {
+                break;
+            }
 
-<button>
+            answer.textContent += decoder.decode(value, {
+                stream: true
+            });
 
-🔄 Test Another Image
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
 
-</button>
+        answer.textContent += decoder.decode();
 
-</a>
+        if (!answer.textContent.trim()) {
+            answer.textContent = "No response received. Please try again.";
+        }
 
+    } catch (error) {
+        answer.textContent =
+            "Sorry, something went wrong. Please check that Flask " +
+            "and Ollama are running, then try again.";
 
+        console.error("Chat streaming error:", error);
 
-</div>
+    } finally {
+        cursor.remove();
+        button.disabled = false;
+        button.textContent = "Send";
+        chatBox.scrollTop = chatBox.scrollHeight;
+        input.focus();
+    }
+}
 
+document.getElementById("sendButton").addEventListener(
+    "click",
+    sendMessage
+);
+
+document.getElementById("chatInput").addEventListener(
+    "keydown",
+    function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            sendMessage();
+        }
+    }
+);
+</script>
 
 </body>
-
 </html>

@@ -1,82 +1,155 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
+{% block title %}Home - AgriVision AI{% endblock %}
 
-<title>Plant Disease Detection</title>
+{% block content %}
 
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<div class="row align-items-center">
 
-</head>
+    <!-- Left Side -->
 
+    <div class="col-lg-6">
 
-<body>
+        <h1 class="display-4 fw-bold text-success">
 
+            🌿 AgriVision AI
 
-<div class="container">
+        </h1>
 
+        <h4 class="mb-4">
 
-<h1>🌱 Plant Disease Detection System</h1>
+            AI-Powered Multi-Crop Disease Detection
 
+        </h4>
 
-<p class="subtitle">
+        <p class="lead">
 
-AI-based plant disease identification using Deep Learning
+            Upload a plant leaf image and let our AI instantly identify diseases,
+            provide confidence scores, symptoms, treatment, and prevention methods.
 
-</p>
+        </p>
 
+        <div class="mt-4">
 
+            <span class="badge bg-success p-2">15+ Crops</span>
 
-<form action="/predict" method="POST" enctype="multipart/form-data">
+            <span class="badge bg-primary p-2">40+ Diseases</span>
 
+            <span class="badge bg-warning text-dark p-2">AI Powered</span>
 
-<input 
-type="file"
-name="file"
-accept="image/*"
-required>
+        </div>
 
+    </div>
 
-<br><br>
+    <!-- Right Side -->
 
+    <div class="col-lg-6">
 
-<button type="submit" onclick="showLoading()">
+        <div class="card shadow-lg border-0 rounded-4 p-4">
 
-🔍 Detect Disease
+            <h3 class="text-center mb-4">
 
-</button>
+                Upload Plant Image
 
+            </h3>
 
-<p id="loading" style="display:none; margin-top:20px; font-size:18px; color:#2e7d32;">
+            <form action="/predict" method="POST" enctype="multipart/form-data">
 
-🔍 Analyzing image... Please wait
+                <input
+                    class="form-control mb-3"
+                    type="file"
+                    name="file"
+                    accept="image/*"
+                    required>
 
-</p>
+                <button
+                    class="btn btn-success w-100"
+                    type="submit"
+                    onclick="showLoading()">
 
+                    🔍 Analyze Plant
 
-</form>
+                </button>
 
+                <div
+                    id="loading"
+                    class="text-center mt-3"
+                    style="display:none;">
+
+                    <div class="spinner-border text-success"></div>
+
+                    <p class="mt-2">
+
+                        AI is analyzing the image...
+
+                    </p>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
 
 </div>
 
+<hr class="my-5">
 
+<div class="row text-center">
+
+    <div class="col-md-4">
+
+        <div class="card shadow-sm p-4">
+
+            <h3>🌾</h3>
+
+            <h5>Multi Crop Support</h5>
+
+            <p>Supports multiple crop species with high accuracy.</p>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card shadow-sm p-4">
+
+            <h3>🧠</h3>
+
+            <h5>Deep Learning</h5>
+
+            <p>Powered by TensorFlow & MobileNetV2.</p>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card shadow-sm p-4">
+
+            <h3>⚡</h3>
+
+            <h5>Instant Results</h5>
+
+            <p>Get disease predictions in just a few seconds.</p>
+
+        </div>
+
+    </div>
+
+</div>
 
 <script>
 
 function showLoading(){
 
-    // Show loading message
-    document.getElementById("loading").style.display = "block";
-
-
-    // Change button text
-    document.querySelector("button").innerHTML = "Processing...";
+document.getElementById("loading").style.display="block";
 
 }
 
 </script>
 
-
-</body>
-
-</html>
+{% endblock %}
